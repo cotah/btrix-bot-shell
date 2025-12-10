@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BTRIX BotSpec",
+  "type": "object",
+  "required": ["bot_id", "plan", "business", "brand", "channels", "flows"],
+  "properties": {
+    "bot_id": {
+      "type": "string",
+      "description": "ID único do bot (gerado pelo N8N, ex: btrix-restaurant-001)"
+    },
+    "plan": {
+      "type": "string",
+      "enum": ["basic", "pro", "premium"],
+      "description": "Plano contratado"
+    },
+    "business": {
+      "type": "object",
+      "required": ["name", "segment", "country", "city"],
+      "properties": {
+        "name": { "type": "string" },
+        "segment": { "type": "string", "description": "Restaurante, clínica, imobiliária, etc." },
+        "country": { "type": "string" },
+        "city": { "type": "string" },
+        "website": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "email": { "type": "string" },
+        "extra_notes": { "type": "string" }
+      }
+    },
+    "brand": {
+      "type": "object",
+      "properties": {
+        "primary_color": { "type": "string", "description": "Cor principal em HEX" },
+        "secondary_color": { "type": "string" },
+        "accent_color": { "type": "string" },
+        "tone_of_voice": {
+          "type": "string",
+          "description": "Ex: profissional, descontraído, premium, jovem"
+        },
+        "logo_url": { "type": "string" }
+      }
+    },
+    "languages": {
+      "type": "object",
+      "properties": {
+        "primary": { "type": "string", "description": "Idioma principal (ex: pt-BR)" },
+        "secondary": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Idiomas adicionais, se houver"
+        }
+      }
+    },
+    "channels": {
+      "type": "object",
+      "properties": {
+        "whatsapp": { "type": "boolean" },
+        "site_widget": { "type": "boolean" },
+        "email": { "type": "boolean" },
+        "instagram": { "type": "boolean" },
+        "facebook": { "type": "boolean" },
+        "telegram": { "type": "boolean" },
+        "sms": { "type": "boolean" },
+        "app": { "type": "boolean" }
+      }
+    },
+    "ai_features": {
+      "type": "object",
+      "properties": {
+        "speech_to_text": { "type": "boolean" },
+        "video_avatar": { "type": "boolean" },
+        "memory": { "type": "boolean" },
+        "lead_scoring": { "type": "boolean" },
+        "sentiment_analysis": { "type": "boolean" }
+      }
+    },
+    "integrations": {
+      "type": "object",
+      "properties": {
+        "crm": { "type": "string", "description": "Nome do CRM, se houver" },
+        "google_sheets": { "type": "boolean" },
+        "custom_api": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "base_url": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "flows": {
+      "type": "object",
+      "description": "Mapa dos principais fluxos conversacionais do bot",
+      "properties": {
+        "welcome": {
+          "type": "object",
+          "properties": {
+            "goal": { "type": "string" },
+            "examples": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "sales": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "goal": { "type": "string" },
+            "products_source": {
+              "type": "string",
+              "description": "De onde vem o cardápio/produtos: texto, planilha, API"
+            }
+          }
+        },
+        "booking": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "goal": { "type": "string" },
+            "needs_calendar_integration": { "type": "boolean" }
+          }
+        },
+        "support": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "goal": { "type": "string" }
+          }
+        },
+        "promotions": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "goal": { "type": "string" }
+          }
+        },
+        "faq": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "De onde vêm as FAQs: texto do cliente, site, planilha"
+            }
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
