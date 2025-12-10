@@ -1,0 +1,29 @@
+{
+  "basic": {
+    "name": "Basic",
+    "channels": ["whatsapp", "site", "email"],
+    "speech_to_text": false,
+    "video": false,
+    "multilingual": false,
+    "languages": ["pt"],
+    "max_flows": 5
+  },
+  "pro": {
+    "name": "Pro",
+    "channels": ["whatsapp", "site", "email", "instagram_or_telegram_or_facebook"],
+    "speech_to_text": true,
+    "video": false,
+    "multilingual": true,
+    "languages": ["pt", "en"],
+    "max_flows": 12
+  },
+  "premium": {
+    "name": "Premium",
+    "channels": ["whatsapp", "site", "email", "instagram", "facebook", "telegram", "sms"],
+    "speech_to_text": true,
+    "video": true,
+    "multilingual": true,
+    "languages": ["pt", "en", "es"],
+    "max_flows": 30
+  }
+}
