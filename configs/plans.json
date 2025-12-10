@@ -1,29 +1,89 @@
 {
   "basic": {
-    "name": "Basic",
-    "channels": ["whatsapp", "site", "email"],
-    "speech_to_text": false,
-    "video": false,
-    "multilingual": false,
-    "languages": ["pt"],
-    "max_flows": 5
+    "label": "PACK BÁSICO — Automation Essentials",
+    "default_channels": {
+      "whatsapp": true,
+      "site_widget": true,
+      "email": true,
+      "instagram": false,
+      "facebook": false,
+      "telegram": false,
+      "sms": false,
+      "app": false
+    },
+    "ai_features": {
+      "speech_to_text": false,
+      "video_avatar": false,
+      "memory": true,
+      "lead_scoring": false,
+      "sentiment_analysis": false,
+      "multilingual": false
+    },
+    "languages": {
+      "primary": "pt-BR",
+      "secondary": []
+    },
+    "limits": {
+      "max_flows": 5
+    }
   },
+
   "pro": {
-    "name": "Pro",
-    "channels": ["whatsapp", "site", "email", "instagram_or_telegram_or_facebook"],
-    "speech_to_text": true,
-    "video": false,
-    "multilingual": true,
-    "languages": ["pt", "en"],
-    "max_flows": 12
+    "label": "PACK PRO — Automation Pro Level",
+    "default_channels": {
+      "whatsapp": true,
+      "site_widget": true,
+      "email": true,
+      "instagram": true,
+      "facebook": false,
+      "telegram": false,
+      "sms": false,
+      "app": false
+    },
+    "ai_features": {
+      "speech_to_text": true,
+      "video_avatar": false,
+      "memory": true,
+      "lead_scoring": true,
+      "sentiment_analysis": false,
+      "multilingual": true
+    },
+    "languages": {
+      "primary": "pt-BR",
+      "secondary": ["en"]
+    },
+    "limits": {
+      "max_flows": 12
+    }
   },
+
   "premium": {
-    "name": "Premium",
-    "channels": ["whatsapp", "site", "email", "instagram", "facebook", "telegram", "sms"],
-    "speech_to_text": true,
-    "video": true,
-    "multilingual": true,
-    "languages": ["pt", "en", "es"],
-    "max_flows": 30
+    "label": "PACK PREMIUM — Enterprise AI Automation",
+    "default_channels": {
+      "whatsapp": true,
+      "site_widget": true,
+      "email": true,
+      "instagram": true,
+      "facebook": true,
+      "telegram": true,
+      "sms": true,
+      "app": true
+    },
+    "ai_features": {
+      "speech_to_text": true,
+      "video_avatar": true,
+      "memory": true,
+      "lead_scoring": true,
+      "sentiment_analysis": true,
+      "multilingual": true
+    },
+    "languages": {
+      "primary": "pt-BR",
+      "secondary": ["en", "es"]
+    },
+    "limits": {
+      "max_flows": 30
+    }
   }
 }
+
