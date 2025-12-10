@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>BTRIX – Glass Bot (Light)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --brand-main: #0f8bff;
+      --brand-gold: #c58a24;
+      --bg-body: #f5f5f7;
+      --text-main: #111827;
+      --text-soft: #6b7280;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      background: radial-gradient(circle at top, #ffffff 0, #f3f4f6 40%, #e5e7eb 100%);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .bot-shell {
+      width: 100%;
+      max-width: 980px;
+      height: 680px;
+      border-radius: 30px;
+      padding: 18px;
+      background: linear-gradient(145deg, #ffffff, #eef2ff);
+      box-shadow:
+        0 30px 60px rgba(15,23,42,0.12),
+        0 0 0 1px rgba(148,163,184,0.6);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+    }
+
+    .bot-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px 4px;
+    }
+
+    .bot-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bot-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 16px;
+      background: radial-gradient(circle at 30% 0, var(--brand-gold), var(--brand-main));
+      box-shadow: 0 0 0 1px rgba(148,163,184,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 17px;
+    }
+
+    .bot-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .bot-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .bot-subtitle {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .bot-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      background: rgba(255,255,255,0.9);
+      color: var(--text-soft);
+      border: 1px solid rgba(148,163,184,0.8);
+      box-shadow: 0 10px 25px rgba(148,163,184,0.4);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .bot-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.22);
+    }
+
+    .chat-panel {
+      border-radius: 22px;
+      background: rgba(255,255,255,0.82);
+      box-shadow:
+        0 0 0 1px rgba(209,213,219,0.9),
+        inset 0 1px 0 rgba(255,255,255,1);
+      padding: 14px 14px 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      gap: 10px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .chat-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .timestamp {
+      align-self: center;
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+
+    .row { display: flex; }
+    .row.bot { justify-content: flex-start; }
+    .row.user { justify-content: flex-end; }
+
+    .bubble {
+      max-width: 70%;
+      padding: 9px 13px;
+      border-radius: 20px;
+      font-size: 14px;
+      line-height: 1.3;
+      position: relative;
+      background: radial-gradient(circle at 0 0,
+        rgba(255,255,255,0.9),
+        rgba(248,250,252,1));
+      color: var(--text-main);
+      border: 1px solid rgba(209,213,219,0.9);
+      box-shadow:
+        0 10px 30px rgba(15,23,42,0.06),
+        0 0 0 1px rgba(255,255,255,0.7);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .bubble::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, var(--brand-main), var(--brand-gold));
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .bubble.user {
+      background: radial-gradient(circle at 30% 0,
+        rgba(255,255,255,0.95),
+        rgba(241,245,249,1));
+      text-align: right;
+    }
+
+    .bubble-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--text-soft);
+      margin-bottom: 3px;
+    }
+
+    .bubble strong {
+      color: #111827;
+      font-weight: 600;
+    }
+
+    .chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.85);
+      color: var(--text-soft);
+      border: 1px solid rgba(209,213,219,1);
+      box-shadow: 0 8px 22px rgba(15,23,42,0.07);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      cursor: pointer;
+    }
+
+    .chip-brand {
+      border-color: var(--brand-main);
+      color: #0f172a;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding: 4px 2px 2px;
+    }
+
+    .input-shell {
+      flex: 1;
+      border-radius: 999px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid rgba(209,213,219,1);
+      box-shadow: 0 10px 26px rgba(15,23,42,0.08);
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .input-placeholder {
+      color: var(--text-soft);
+      flex: 1;
+    }
+
+    .input-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.9);
+    }
+
+    /* BOTÃO DE VOZ (PRO – LIGHT) */
+    .mic-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow:
+        0 10px 22px rgba(15,23,42,0.15),
+        0 0 0 1px rgba(209,213,219,1);
+    }
+
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 0, var(--brand-main), var(--brand-gold));
+      box-shadow: 0 16px 34px rgba(15,118,229,0.35);
+      color: #ffffff;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      .bot-shell { height: 90vh; }
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 10px; }
+      .bot-shell { border-radius: 24px; padding: 14px; }
+      .bubble { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<section class="bot-shell">
+  <header class="bot-header">
+    <div class="bot-header-left">
+      <div class="bot-logo">B</div>
+      <div class="bot-title-wrap">
+        <div class="bot-title">BTRIX – Business AI Assistant</div>
+        <div class="bot-subtitle">Glass Bot · Light Blue & Gold · PRO (voz)</div>
+      </div>
+    </div>
+    <div class="bot-badge">
+      <span class="bot-badge-dot"></span>
+      <span>Online · IA cuidando dos seus canais</span>
+    </div>
+  </header>
+
+  <main class="chat-panel">
+    <div class="chat-scroll">
+      <div class="timestamp">Hoje · 09:18</div>
+
+      <div class="row bot">
+        <div class="bubble">
+          <div class="bubble-label">BTRIX · IA DO SEU NEGÓCIO</div>
+          Bem-vindo 👋 Sou o <strong>assistente BTRIX</strong>.
+          Já carreguei a ficha da sua empresa e posso montar:
+          <br><br>
+          • Atendimento automático<br>
+          • Funil de vendas<br>
+          • Suporte e FAQ<br>
+          • Reservas ou agendamentos
+          <div class="chips-row">
+            <div class="chip chip-brand">Ver fluxo de pedidos</div>
+            <div class="chip">Testar reservas</div>
+            <div class="chip">Configurar packs (Basic / Pro / Premium)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row user">
+        <div class="bubble user">
+          <div class="bubble-label">Você</div>
+          Quero um bot para salão de beleza, com agenda online e lembretes
+          automáticos para as clientes.
+        </div>
+      </div>
+
+      <div class="row bot">
+        <div class="bubble">
+          <div class="bubble-label">BTRIX · AUTOMATION BLUEPRINT</div>
+          Maravilha. Vou gerar o template BTRIX com:
+          <br><br>
+          • Visual clean em vidro<br>
+          • Jornadas prontas para agendamentos<br>
+          • Integração com WhatsApp e e-mail
+          <div class="chips-row">
+            <div class="chip chip-brand">Pré-visualizar Pack Básico</div>
+            <div class="chip">Pré-visualizar Pack Pro</div>
+            <div class="chip">Pré-visualizar Pack Premium</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INPUT COM VOZ -->
+    <div class="input-row">
+      <div class="input-shell">
+        <div class="input-dot"></div>
+        <div class="input-placeholder">
+          Fale ou digite o próximo negócio que você quer automatizar…
+        </div>
+      </div>
+
+      <!-- Botão de voz (speech-to-text) -->
+      <button class="mic-btn" title="Falar com o bot">
+        🎤
+      </button>
+
+      <!-- Botão de enviar texto -->
+      <button class="send-btn" title="Enviar mensagem">
+        ➤
+      </button>
+    </div>
+  </main>
+</section>
+
+</body>
+</html>
